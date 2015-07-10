@@ -31,23 +31,53 @@
       <div class="col-md-12">
         <pre>
           <code>
-           var wait = function() {
-             var dtd = $.Deferred();
-             var task = function() {
-               alert('finished');
-               dtd.resolve('i am resolved')
-             }
+            var wait = function() {
+              var dtd = $.Deferred();
+              var task = function() {
+                alert('Look at console of reject');
+                dtd.reject('i am resolved')
+              }
 
-             setTimeout(task, 3e3);
+              setTimeout(task, 3e3);
 
-             return dtd.promise(); //deferred的高级封装只暴露了then等方法,没有resolve,reject等方法
-           }
+              return dtd.promise(); //deferred的高级封装只暴露了then等方法,没有resolve,reject等方法
+            }
 
-           var getDataPromise = $.get('/data.json');
-           $.when(wait(), getDataPromise)
-           .done(function(msg, data) {
-             console.log(msg, data);
-           });
+            wait().done(function(msg) {
+              console.log('sucess......', msg, 'end sucess...')
+            })
+            .fail(function(msg) {
+              console.log('fail......')
+              console.log('this:', this);
+              console.log('msg:', msg);
+              console.log('end fail......')
+            });
+          </code>
+        </pre>
+        <pre>
+          <code>
+            var wait = function() {
+              var dtd = $.Deferred();
+              var task = function() {
+                alert('Look at console of rejectWith');
+                dtd.rejectWith({id: 1}, ['i am resolved'])
+              }
+
+              setTimeout(task, 3e3);
+
+              return dtd.promise(); //deferred的高级封装只暴露了then等方法,没有resolve,reject等方法
+            }
+
+            wait().done(function(msg) {
+              console.log('sucessWith......', msg, 'end sucessWith...')
+            })
+            .fail(function(msg) {
+              console.log('');
+              console.log('failWith......')
+              console.log('this:', this);
+              console.log('msg:', msg);
+              console.log('end failWith......')
+            });
           </code>
         </pre>
       </div>
